@@ -2,14 +2,8 @@
 using System.Collections;
 
 public class MusicPlayer : MonoBehaviour {
-
-	private static MusicPlayer instance = null;
-     
-    public static MusicPlayer Instance {
-    	get { 
-        	return instance; 
-        }
-    }
+    
+    public static MusicPlayer instance { get; private set; }
 
 	private void Awake() {
 	    // If the singleton has been initialized, destroy the new instance 
