@@ -27,9 +27,9 @@ public class PlayerShipController : MonoBehaviour {
         Camera mainCamera = Camera.main;
         Bounds rendererBounds = GetComponent<Renderer>().bounds;
         leftBoundary = mainCamera.ViewportToWorldPoint(Vector3.zero);
-        leftBoundary += new Vector3(rendererBounds.extents.x + 0.2f, 0, 0);
+        leftBoundary += new Vector3(rendererBounds.extents.x, 0, 0);
         rightBoundary = mainCamera.ViewportToWorldPoint(Vector3.right);
-        rightBoundary -= new Vector3(rendererBounds.extents.x + 0.2f, 0, 0);
+        rightBoundary -= new Vector3(rendererBounds.extents.x, 0, 0);
     }
 
     private static Movement GetMovementDirection() {
