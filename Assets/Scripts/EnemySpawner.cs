@@ -2,13 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using Extension;
+
 public class EnemySpawner : MonoBehaviour {
+
+    private const string BOUNDARY_TAG = "Boundary";
 
     public GameObject enemyPrefab;
 
-    public float gizmoBoxPadding = 2.0f;
+    public float width = 4.5f;
+    public float speed = 1.0f;
+
+    private float leftBoundary;
+    private float rightBoundary;
+
+    private bool movingRight;
 
 	void Start () {
+        leftBoundary = Camera.main.getCameraLeftBoundary();
+        rightBoundary = Camera.main.getCameraRightBoundary();
+        movingRight = true;
+
         SpawnEnemies();
 	}
 
@@ -19,29 +33,21 @@ public class EnemySpawner : MonoBehaviour {
         }
     }
 
-    void OnDrawGizmos() {
-        Gizmos.DrawWireCube(
-            transform.position,
-            CalculateChildrenBounds().size + new Vector3(gizmoBoxPadding, gizmoBoxPadding, 0));
+    private void ChangeDirection() {
+        movingRight = !movingRight;
     }
 
-    private Bounds CalculateChildrenBounds() {
-        Bounds childBounds = new Bounds(transform.position, Vector3.zero);
+    void Update() {
+        transform.position += 
+            (movingRight ? Vector3.right : Vector3.left) * speed * Time.deltaTime;
 
-        foreach (Transform child in transform) {
-            if (!childBounds.Contains(child.position)) {
-                childBounds.Expand(Abs(child.position));
-            }
+        if (FormationExceedsBoundaries()) {
+            ChangeDirection();
         }
-
-        return childBounds;
     }
 
-    private Vector3 Abs(Vector3 target) {
-        return new Vector3(
-            Mathf.Abs(target.x),
-            Mathf.Abs(target.y),
-            Mathf.Abs(target.z));
+    private bool FormationExceedsBoundaries() {
+        return (transform.position.x - width) < leftBoundary || (transform.position.x + width) > rightBoundary;
     }
 
 }
