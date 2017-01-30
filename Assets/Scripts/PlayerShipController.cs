@@ -10,6 +10,7 @@ public class PlayerShipController : MonoBehaviour {
 
     public GameObject laser;
     public float laserVelocity;
+    public float fireRate;
 
     private new Rigidbody2D rigidbody;
 
@@ -70,9 +71,15 @@ public class PlayerShipController : MonoBehaviour {
 
     void HandleFiring() {
         if (Input.GetKeyDown(KeyCode.Space)) {
-            GameObject laserClone = Instantiate(laser, transform.position, Quaternion.identity);
-            laserClone.GetComponent<Rigidbody2D>().velocity = new Vector2(0.0f, laserVelocity);
+            InvokeRepeating("Fire", 0.00001f, fireRate);
+        } else if (Input.GetKeyUp(KeyCode.Space)) {
+            CancelInvoke("Fire");
         }
+    }
+
+    private void Fire() {
+        GameObject laserClone = Instantiate(laser, transform.position, Quaternion.identity);
+        laserClone.GetComponent<Rigidbody2D>().velocity = new Vector2(0.0f, laserVelocity);
     }
 
 }
