@@ -41,13 +41,12 @@ public class EnemySpawner : MonoBehaviour {
         transform.position += 
             (movingRight ? Vector3.right : Vector3.left) * speed * Time.deltaTime;
 
-        if (FormationExceedsBoundaries()) {
-            ChangeDirection();
-        }
+        UpdateDirectionIfNeeded();
     }
 
-    private bool FormationExceedsBoundaries() {
-        return (transform.position.x - width) < leftBoundary || (transform.position.x + width) > rightBoundary;
+    private void UpdateDirectionIfNeeded() {
+        if ((transform.position.x - width) < leftBoundary) movingRight = true;
+        else if ((transform.position.x + width > rightBoundary)) movingRight = false;
     }
 
 }
