@@ -4,7 +4,7 @@ using UnityEngine;
 
 using Extension;
 
-public class EnemySpawner : MonoBehaviour {
+public class EnemyFormation : MonoBehaviour {
 
     private const string BOUNDARY_TAG = "Boundary";
 
