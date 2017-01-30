@@ -2,14 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using Extension;
+
 public class PlayerShipController : MonoBehaviour {
 
     public float horizontalVelocity;
 
+    public GameObject laser;
+    public float laserVelocity;
+
     private new Rigidbody2D rigidbody;
 
-    private Vector3 leftBoundary;
-    private Vector3 rightBoundary;
+    private float leftBoundary;
+    private float rightBoundary;
 
     private enum Movement {
         LEFT = -1,
@@ -24,12 +29,11 @@ public class PlayerShipController : MonoBehaviour {
     }
 
     private void InitializeBoundaries() {
-        Camera mainCamera = Camera.main;
         Bounds rendererBounds = GetComponent<Renderer>().bounds;
-        leftBoundary = mainCamera.ViewportToWorldPoint(Vector3.zero);
-        leftBoundary += new Vector3(rendererBounds.extents.x, 0, 0);
-        rightBoundary = mainCamera.ViewportToWorldPoint(Vector3.right);
-        rightBoundary -= new Vector3(rendererBounds.extents.x, 0, 0);
+        leftBoundary = Camera.main.getCameraLeftBoundary();;
+        leftBoundary += rendererBounds.extents.x;
+        rightBoundary = Camera.main.getCameraRightBoundary();
+        rightBoundary -= rendererBounds.extents.x;
     }
 
     private static Movement GetMovementDirection() {
@@ -44,6 +48,7 @@ public class PlayerShipController : MonoBehaviour {
 
     void FixedUpdate() {
         HandleMovement();
+        HandleFiring();
     }
 
     private void HandleMovement() {
@@ -59,8 +64,15 @@ public class PlayerShipController : MonoBehaviour {
     }
 
     private bool CanMove(Movement movement) {
-        return !(leftBoundary.x >= transform.position.x && movement == Movement.LEFT) &&
-            !(rightBoundary.x <= transform.position.x && movement == Movement.RIGHT);
+        return !(leftBoundary >= transform.position.x && movement == Movement.LEFT) &&
+               !(rightBoundary <= transform.position.x && movement == Movement.RIGHT);
+    }
+
+    void HandleFiring() {
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            GameObject laserClone = Instantiate(laser, transform.position, Quaternion.identity);
+            laserClone.GetComponent<Rigidbody2D>().velocity = new Vector2(0.0f, laserVelocity);
+        }
     }
 
 }
