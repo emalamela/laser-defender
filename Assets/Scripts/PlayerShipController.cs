@@ -8,6 +8,8 @@ public class PlayerShipController : MonoBehaviour {
 
     public float horizontalVelocity;
 
+    public float health = 250.0f;
+
     public GameObject laser;
     public float laserVelocity;
     public float fireRate;
@@ -79,7 +81,18 @@ public class PlayerShipController : MonoBehaviour {
 
     private void Fire() {
         GameObject laserClone = Instantiate(laser, transform.position, Quaternion.identity);
+        laserClone.GetComponent<Laser>().fromPlayer = true;
         laserClone.GetComponent<Rigidbody2D>().velocity = new Vector2(0.0f, laserVelocity);
+    }
+
+    void OnTriggerEnter2D(Collider2D collider) {
+        Laser collidingLaser = collider.GetComponent<Laser>();
+
+        if (collidingLaser == null || collidingLaser.fromPlayer) return;
+
+        collidingLaser.Hit();
+        health -= collidingLaser.getDamage();
+        if (health <= 0) Destroy(gameObject);
     }
 
 }
