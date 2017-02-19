@@ -81,14 +81,13 @@ public class PlayerShipController : MonoBehaviour {
 
     private void Fire() {
         GameObject laserClone = Instantiate(laser, transform.position, Quaternion.identity);
-        laserClone.GetComponent<Laser>().fromPlayer = true;
         laserClone.GetComponent<Rigidbody2D>().velocity = new Vector2(0.0f, laserVelocity);
     }
 
     void OnTriggerEnter2D(Collider2D collider) {
         Laser collidingLaser = collider.GetComponent<Laser>();
 
-        if (collidingLaser == null || collidingLaser.fromPlayer) return;
+        if (collidingLaser == null) return;
 
         collidingLaser.Hit();
         health -= collidingLaser.getDamage();

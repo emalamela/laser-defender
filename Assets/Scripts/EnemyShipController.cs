@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBehaviour : MonoBehaviour {
+public class EnemyShipController : MonoBehaviour {
 
     public float health = 150.0f;
 
@@ -18,14 +18,13 @@ public class EnemyBehaviour : MonoBehaviour {
 
     private void Fire() {
         GameObject laserClone = Instantiate(laser, transform.position, Quaternion.identity);
-        laserClone.GetComponent<Laser>().fromPlayer = false;
         laserClone.GetComponent<Rigidbody2D>().velocity = new Vector2(0.0f, -laserVelocity);
     }
 
     void OnTriggerEnter2D(Collider2D collider) {
         Laser collidingLaser = collider.GetComponent<Laser>();
 
-        if (collidingLaser == null || !collidingLaser.fromPlayer) return;
+        if (collidingLaser == null) return;
 
         collidingLaser.Hit();
         health -= collidingLaser.getDamage();
