@@ -11,6 +11,8 @@ public class EnemyFormation : MonoBehaviour {
     public float width = 4.5f;
     public float speed = 1.0f;
 
+    public float enemySpawnDelay = 0.5f;
+
     private float leftBoundary;
     private float rightBoundary;
 
@@ -26,8 +28,7 @@ public class EnemyFormation : MonoBehaviour {
 
     void SpawnEnemies() {
         foreach (Transform child in transform) {
-            GameObject enemy = Instantiate(enemyPrefab, child.position, Quaternion.identity) as GameObject;
-            enemy.transform.parent = child;
+            SpawnEnemyAt(child);
         }
     }
 
@@ -50,8 +51,30 @@ public class EnemyFormation : MonoBehaviour {
         UpdateDirectionIfNeeded();
 
         if (AllEnemiesDestroyed()) {
-            SpawnEnemies();
+            SpawnEnemiesUntilFull();
         }
+    }
+
+    private void SpawnEnemiesUntilFull() {
+        Transform emptySpawnPosition = NextEmptySpawnPosition();
+
+        if (emptySpawnPosition == null) return;
+
+        SpawnEnemyAt(emptySpawnPosition);
+        Invoke("SpawnEnemiesUntilFull", enemySpawnDelay);
+    }
+
+    private void SpawnEnemyAt(Transform spawnPosition) {
+        GameObject enemy = Instantiate(enemyPrefab, spawnPosition.position, Quaternion.identity) as GameObject;
+        enemy.transform.parent = spawnPosition;
+    }
+
+    private Transform NextEmptySpawnPosition() {
+        foreach (Transform spawnPosition in transform) {
+            if (spawnPosition.childCount == 0) return spawnPosition;
+        }
+
+        return null;
     }
 
     private void UpdateDirectionIfNeeded() {
