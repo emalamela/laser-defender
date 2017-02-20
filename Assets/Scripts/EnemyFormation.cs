@@ -6,8 +6,6 @@ using Extension;
 
 public class EnemyFormation : MonoBehaviour {
 
-    private const string BOUNDARY_TAG = "Boundary";
-
     public GameObject enemyPrefab;
 
     public float width = 4.5f;
@@ -33,6 +31,14 @@ public class EnemyFormation : MonoBehaviour {
         }
     }
 
+    private bool AllEnemiesDestroyed() {
+        foreach (Transform spawnPosition in transform) {
+            if (spawnPosition.childCount > 0) return false;
+        }
+
+        return true;
+    }
+
     private void ChangeDirection() {
         movingRight = !movingRight;
     }
@@ -42,6 +48,10 @@ public class EnemyFormation : MonoBehaviour {
             (movingRight ? Vector3.right : Vector3.left) * speed * Time.deltaTime;
 
         UpdateDirectionIfNeeded();
+
+        if (AllEnemiesDestroyed()) {
+            SpawnEnemies();
+        }
     }
 
     private void UpdateDirectionIfNeeded() {
