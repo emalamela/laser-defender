@@ -23,14 +23,8 @@ public class EnemyFormation : MonoBehaviour {
         rightBoundary = Camera.main.getCameraRightBoundary();
         movingRight = true;
 
-        SpawnEnemies();
+        SpawnEnemiesUntilFull();
 	}
-
-    void SpawnEnemies() {
-        foreach (Transform child in transform) {
-            SpawnEnemyAt(child);
-        }
-    }
 
     private bool AllEnemiesDestroyed() {
         foreach (Transform spawnPosition in transform) {
