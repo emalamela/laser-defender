@@ -10,6 +10,14 @@ public class EnemyShipController : MonoBehaviour {
     public float fireRateSeconds = 0.5f;
     public float laserVelocity = 5.0f;
 
+    private GameManager gameManager;
+    public int pointsWorth;
+
+    void Start() {
+        pointsWorth = Random.Range(10, 20);
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+    }
+
     void Update() {
         float fireProbability = fireRateSeconds * Time.deltaTime;
 
@@ -28,7 +36,10 @@ public class EnemyShipController : MonoBehaviour {
 
         collidingLaser.Hit();
         health -= collidingLaser.getDamage();
-        if (health <= 0) Destroy(gameObject);
+        if (health <= 0) {
+            Destroy(gameObject);
+            gameManager.Score(pointsWorth);
+        }
     }
 	
 }
