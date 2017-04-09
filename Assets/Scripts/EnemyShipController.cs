@@ -13,9 +13,13 @@ public class EnemyShipController : MonoBehaviour {
     private GameManager gameManager;
     public int pointsWorth;
 
+    private AudioSource audioSource;
+    public AudioClip fireSound;
+
     void Start() {
         pointsWorth = Random.Range(10, 20);
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        audioSource = AudioPlayer.instance.GetComponent<AudioSource>();
     }
 
     void Update() {
@@ -27,6 +31,7 @@ public class EnemyShipController : MonoBehaviour {
     private void Fire() {
         GameObject laserClone = Instantiate(laser, transform.position, Quaternion.identity);
         laserClone.GetComponent<Rigidbody2D>().velocity = new Vector2(0.0f, -laserVelocity);
+        audioSource.PlayOneShot(fireSound, 0.5f);
     }
 
     void OnTriggerEnter2D(Collider2D collider) {

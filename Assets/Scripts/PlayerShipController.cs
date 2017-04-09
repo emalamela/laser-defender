@@ -19,6 +19,10 @@ public class PlayerShipController : MonoBehaviour {
     private float leftBoundary;
     private float rightBoundary;
 
+    private AudioSource audioSource;
+    public AudioClip fireSound;
+    public AudioClip deathSound;
+
     private enum Movement {
         LEFT = -1,
         NONE = 0,
@@ -27,6 +31,7 @@ public class PlayerShipController : MonoBehaviour {
 
     void Start() {
         rigidbody = GetComponent<Rigidbody2D>();
+        audioSource = AudioPlayer.instance.GetComponent<AudioSource>();
 
         InitializeBoundaries();
     }
@@ -82,6 +87,7 @@ public class PlayerShipController : MonoBehaviour {
     private void Fire() {
         GameObject laserClone = Instantiate(laser, transform.position, Quaternion.identity);
         laserClone.GetComponent<Rigidbody2D>().velocity = new Vector2(0.0f, laserVelocity);
+        audioSource.PlayOneShot(fireSound, 0.75f);
     }
 
     void OnTriggerEnter2D(Collider2D collider) {
@@ -91,7 +97,10 @@ public class PlayerShipController : MonoBehaviour {
 
         collidingLaser.Hit();
         health -= collidingLaser.getDamage();
-        if (health <= 0) Destroy(gameObject);
+        if (health <= 0) {
+            Destroy(gameObject);
+            audioSource.PlayOneShot(deathSound);
+        }
     }
 
 }

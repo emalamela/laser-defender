@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MusicPlayer : MonoBehaviour {
+public class AudioPlayer : MonoBehaviour {
     
-    public static MusicPlayer instance { get; private set; }
+    public static AudioPlayer instance { get; private set; }
 
 	private void Awake() {
 	    // If the singleton has been initialized, destroy the new instance 
@@ -17,4 +17,5 @@ public class MusicPlayer : MonoBehaviour {
 		// Prevent it from being destroyed when a scene change occurs
 	    DontDestroyOnLoad(gameObject);
  	}
+
 }
