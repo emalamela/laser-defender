@@ -43,7 +43,7 @@ public class EnemyShipController : MonoBehaviour {
         health -= collidingLaser.getDamage();
         if (health <= 0) {
             Destroy(gameObject);
-            gameManager.Score(pointsWorth);
+            gameManager.ScorePoints(pointsWorth);
         }
     }
 	

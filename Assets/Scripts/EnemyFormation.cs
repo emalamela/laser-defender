@@ -8,6 +8,9 @@ public class EnemyFormation : MonoBehaviour {
 
     public GameObject enemyPrefab;
 
+    public int enemyWaves = 3;
+    private int currentWave;
+
     public float width = 4.5f;
     public float speed = 1.0f;
 
@@ -22,8 +25,9 @@ public class EnemyFormation : MonoBehaviour {
         leftBoundary = Camera.main.getCameraLeftBoundary();
         rightBoundary = Camera.main.getCameraRightBoundary();
         movingRight = true;
+        currentWave = 0;
 
-        SpawnEnemiesUntilFull();
+        SpawnWave();
 	}
 
     private bool AllEnemiesDestroyed() {
@@ -45,8 +49,18 @@ public class EnemyFormation : MonoBehaviour {
         UpdateDirectionIfNeeded();
 
         if (AllEnemiesDestroyed()) {
-            SpawnEnemiesUntilFull();
+            if (currentWave >= enemyWaves) {
+                GameObject.Find("LevelManager").GetComponent<LevelManager>().LoadResultScene(true);
+            } else {
+                SpawnWave();
+            }
         }
+    }
+
+    private void SpawnWave() {
+        currentWave++;
+
+        SpawnEnemiesUntilFull();
     }
 
     private void SpawnEnemiesUntilFull() {

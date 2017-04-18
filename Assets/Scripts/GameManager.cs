@@ -5,25 +5,34 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
-    private int scorePoints;
+    public static int score;
+    public static bool won;
 
     public Text scoreText;
+    public Text resultText;
 
     void Start() {
-        ResetScore();
+        if (resultText != null) {
+            resultText.text = won ? "You Won!" : "You Lost!";
+        }
+        printScore();
     }
 
-    public void Score(int gainedPoints) {
-        SetScore(scorePoints + gainedPoints);
+    public void ScorePoints(int gainedPoints) {
+        score += gainedPoints;
+        printScore();
     }
 
-    public void ResetScore() {
-        SetScore(0);
+    private void printScore() {
+        scoreText.text = "Score - " + score.ToString();
     }
 
-    private void SetScore(int score) {
-        scorePoints = score;
-        scoreText.text = scorePoints.ToString();
+    public static void ResetScore() {
+        score = 0;
+    }
+
+    public static void SetResult(bool gameWon) {
+        won = gameWon;
     }
 	
 }

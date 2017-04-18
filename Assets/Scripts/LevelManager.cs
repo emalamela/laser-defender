@@ -6,23 +6,19 @@ public class LevelManager : MonoBehaviour {
 
 	private const string LEVEL_SCENE_FORMAT_NAME = "Level_{0:D2}";
 
-	private const string GAME_SCENE_NAME = "Game";
-	private const string WIN_SCENE_NAME = "Win";
-	private const string START_SCENE_NAME = "Start";
-	private const string LOSE_SCENE_NAME = "Lose";
+    private const string START_SCENE_NAME = "Start";
+    private const string GAME_SCENE_NAME = "Game";
+    private const string RESULT_SCENE_NAME = "Result";
 
 	public void LoadGameScene() {
+        GameManager.ResetScore();
 		LoadScene(GAME_SCENE_NAME);
 	}
 
-	public void LoadWinScene() {
-		LoadScene(WIN_SCENE_NAME);
-	}
-
-	public void LoadLoseScene() {
-		// TODO: Make a lose scene
-		LoadScene(WIN_SCENE_NAME);
-	}
+    public void LoadResultScene(bool won) {
+        LoadScene(RESULT_SCENE_NAME);
+        GameManager.SetResult(won);
+    }
 
 	public void LoadStartScene() {
 		LoadScene(START_SCENE_NAME);
@@ -51,7 +47,7 @@ public class LevelManager : MonoBehaviour {
 		int lastLevelSceneIndex = SceneManager.sceneCountInBuildSettings - 2;
 
 		if (sceneIndex >= lastLevelSceneIndex) {
-			LoadWinScene();
+            LoadResultScene(false);
 			return;
 		}
 

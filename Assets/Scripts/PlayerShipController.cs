@@ -98,9 +98,14 @@ public class PlayerShipController : MonoBehaviour {
         collidingLaser.Hit();
         health -= collidingLaser.getDamage();
         if (health <= 0) {
-            Destroy(gameObject);
+            Die();
             audioSource.PlayOneShot(deathSound);
         }
+    }
+
+    private void Die() {
+        GameObject.Find("LevelManager").GetComponent<LevelManager>().LoadResultScene(false);
+        Destroy(gameObject);
     }
 
 }
