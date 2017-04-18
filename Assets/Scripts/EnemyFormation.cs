@@ -50,11 +50,15 @@ public class EnemyFormation : MonoBehaviour {
 
         if (AllEnemiesDestroyed()) {
             if (currentWave >= enemyWaves) {
-                GameObject.Find("LevelManager").GetComponent<LevelManager>().LoadResultScene(true);
+                Invoke("WinGame", 1.0f);
             } else {
                 SpawnWave();
             }
         }
+    }
+
+    private void WinGame() {
+        GameObject.Find("LevelManager").GetComponent<LevelManager>().LoadResultScene(true);
     }
 
     private void SpawnWave() {

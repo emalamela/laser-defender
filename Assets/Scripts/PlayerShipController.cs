@@ -104,6 +104,11 @@ public class PlayerShipController : MonoBehaviour {
     }
 
     private void Die() {
+        gameObject.SetActive(false);
+        Invoke("LoseGame", 2.0f);
+    }
+
+    private void LoseGame() {
         GameObject.Find("LevelManager").GetComponent<LevelManager>().LoadResultScene(false);
         Destroy(gameObject);
     }
